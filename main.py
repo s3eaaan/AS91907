@@ -1,9 +1,26 @@
 import tkinter as tk
 import json
+import os
 from calculator import CalcFunc
 from meal import MealFunc
+
 with open('menus.json', 'r') as f:
     menus = json.load(f)
+
+def save_selections():
+    selections = [var.get() for var in selected_meals]
+    with open('last_selections.json', 'w') as f:
+        json.dump(selections, f)
+
+def load_selections():
+    if os.path.exists('last_selections.json'):
+        with open('last_selections.json', 'r') as f:
+            try:
+                selections = json.load(f)
+                for var, value in zip(selected_meals, selections):
+                    var.set(value)
+            except Exception:
+                pass
 
 ALL_MENUS = [
     menus["breakfast_menu"],
@@ -77,6 +94,8 @@ selected_meals = [
     selected_dessert,
     selected_dinner,
 ]
+
+load_selections()
 
 results = tk.Label(left_frame, text="")
 results.pack()
@@ -207,5 +226,17 @@ def calculation_and_graph():
     charts = calculator.calculation_and_graph()
 
 tk.Button(left_frame, text="Calculate Nutrition", command=calculation_and_graph).pack()
+
+def on_closing():
+    save_selections()
+    root.destroy()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
+def calculation_and_graph():
+    global charts
+    calculator = CalcFunc(charts, ALL_MENUS, selected_meals,
+                          results, right_frame, root)
+    charts = calculator.calculation_and_graph()
+    save_selections()
 
 root.mainloop()
