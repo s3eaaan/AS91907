@@ -50,3 +50,13 @@ class MealFunc:
     def selections(self):
         """Return values."""
         return self.meat, self.meal
+    
+    def update_menu_options(self, new_menu_dict):
+        # Assumes self.dropdown is your OptionMenu and self.meal_var is its StringVar
+        menu_names = list(new_menu_dict.keys())
+        menu = self.meal_selection['menu']
+        menu.delete(0, 'end')  # clear all itmes
+        for name in menu_names: 
+            menu.add_command(label=name, command=lambda value=name: self.meal.set(value))
+        if menu_names:  # if list isnt empty
+            self.meal.set(menu_names[0])  # make first option breafkast
