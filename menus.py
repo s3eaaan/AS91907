@@ -1,4 +1,4 @@
-"""Store menus"""
+"""Store menus."""
 
 menus = {
     "breakfast_menu": {
