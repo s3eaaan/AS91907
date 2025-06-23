@@ -35,7 +35,6 @@ class CalcFunc:
                 self.charts = None  # set to None so IF doesn't run again
             for widget in self.frame.winfo_children():
                 widget.destroy()
-            self.frame.pack_forget()  # close chart frame
             self.root.update_idletasks()  # stop all ongoing tasks
             self.root.geometry("")  # Resize to previous window size
             return self.charts
