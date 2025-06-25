@@ -7,7 +7,7 @@ from meal import MealFunc
 with open('menus.json', 'r') as f:
     menus = json.load(f)
 
-MAX_CALORIES = 2300
+max_calories = 2300
 charts = None
 custom_meals = []
 menu_dict = {"Breakfast": "breakfast_menu", 
@@ -123,7 +123,7 @@ def calculation_and_graph():
         widget.destroy()
     global charts
     calculator = CalcFunc(charts, ALL_MENUS, selected_meals,
-                          results, right_frame, root, MAX_CALORIES)
+                          results, right_frame, root, max_calories)
     charts = calculator.calculation_and_graph()
     save_selections()
 
@@ -335,6 +335,7 @@ def show_calorie_input():
 
     # Calculate Button
     def set_max_calories():
+        """Calculate max calories."""
         try:
             sex = sex_var.get()
             height = int(height_entry.get())
@@ -343,10 +344,10 @@ def show_calorie_input():
                 bmr = 10*weight + 6.25*height + 5  # traditionally/common calculation
             else:
                 bmr = 10*weight + 6.25*height - 161
-            max_calories = int(bmr * 1.2)
-            global MAX_CALORIES  # Change the constant to a variable
-            MAX_CALORIES = max_calories
-            results.config(text=f"Max Calories set to {MAX_CALORIES} kcal.")
+            new_max_calories = int(bmr * 1.2)
+            global max_calories  # Change the constant to a variable
+            max_calories = new_max_calories
+            results.config(text=f"Max Calories set to {max_calories} kcal.")
             show_calorie_input.frame.destroy()
         except Exception as e:
             results.config(text="Please enter whole numbers.")
