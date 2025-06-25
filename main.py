@@ -113,19 +113,30 @@ def calculation_and_graph():
     save_selections()
 
 
-def show_extra_inputs():
+def hide_charts():
+    global charts
+    if charts is not None:
+        try:
+            charts.get_tk_widget().destroy()
+        except Exception:
+            pass
+        charts = None
+
+
+def custom_meal():
     """Make the frame for custom meal section."""
-    show_extra_inputs.inputs_frame = tk.Frame(right_frame, bg='#e0e0e0')
-    show_extra_inputs.inputs_frame.pack(fill='x', pady=20, padx=20)
+    hide_charts()
+    custom_meal.inputs_frame = tk.Frame(right_frame, bg='#e0e0e0')
+    custom_meal.inputs_frame.pack(fill='x', pady=20, padx=20)
 
     # Input boxes
     labels = ["Name", "Calories", "Protein", "Fats", "Carbs"]
     global extra_entries
     extra_entries = []
     for i, macro_name in enumerate(labels):  # print key and value
-        label = tk.Label(show_extra_inputs.inputs_frame, text=f"{macro_name}:", bg='#e0e0e0')
+        label = tk.Label(custom_meal.inputs_frame, text=f"{macro_name}:", bg='#e0e0e0')
         label.grid(row=i, column=0, sticky='e', padx=5, pady=2)
-        entry = tk.Entry(show_extra_inputs.inputs_frame)  # Input box
+        entry = tk.Entry(custom_meal.inputs_frame)  # Input box
         entry.grid(row=i, column=1, padx=5, pady=2)
         extra_entries.append(entry)  # Add to list of custom meals
 
@@ -137,13 +148,13 @@ def show_extra_inputs():
     menu_choice_var.set(menu_names[0])  # defolt choice is bfast
 
     # Dropdown boxes and labels
-    menu_label = tk.Label(show_extra_inputs.inputs_frame, text="Add to menu:", bg='#e0e0e0')
+    menu_label = tk.Label(custom_meal.inputs_frame, text="Add to menu:", bg='#e0e0e0')
     menu_label.grid(row=len(labels), column=0, sticky='e', padx=5, pady=2)
-    menu_dropdown = tk.OptionMenu(show_extra_inputs.inputs_frame, menu_choice_var, *menu_names)
+    menu_dropdown = tk.OptionMenu(custom_meal.inputs_frame, menu_choice_var, *menu_names)
     menu_dropdown.grid(row=len(labels), column=1, padx=5, pady=2)
 
     # Submit button
-    submit = tk.Button(show_extra_inputs.inputs_frame,
+    submit = tk.Button(custom_meal.inputs_frame,
                        text="Submit",command=process_inputs)
     submit.grid(row=len(labels) + 1, 
                 column=0, columnspan=2, pady=(10, 2))
@@ -152,7 +163,7 @@ def show_extra_inputs():
         toggle_extra_inputs(shown=True)
 
     # Close inputs button
-    close = tk.Button(show_extra_inputs.inputs_frame,
+    close = tk.Button(custom_meal.inputs_frame,
                       text="Close Inputs", command=close_inputs)
     close.grid(row=len(labels) + 2, 
                column=0, columnspan=2, pady=(2, 10))
@@ -213,22 +224,23 @@ def process_inputs():
 
 def hide_extra_inputs():
     """Hide custom meal section"""
-    if hasattr(show_extra_inputs, "inputs_frame"):
-    # if show_extra_inputs has an open frame
+    hide_charts()
+    if hasattr(custom_meal, "inputs_frame"):
+    # if custom_meal has an open frame
         try:
-            show_extra_inputs.inputs_frame.destroy()
+            custom_meal.inputs_frame.destroy()
         except Exception:
             pass
-        del show_extra_inputs.inputs_frame
+        del custom_meal.inputs_frame
 
 def toggle_extra_inputs(shown=False):
     """Toggle ability to open and close section"""
-    if hasattr(show_extra_inputs, "inputs_frame"):
-        if show_extra_inputs.inputs_frame.winfo_exists():
+    if hasattr(custom_meal, "inputs_frame"):
+        if custom_meal.inputs_frame.winfo_exists():
             hide_extra_inputs()
             return
     if not shown:
-        show_extra_inputs()
+        custom_meal()
 
 
 def on_closing():  # When user closes window (X)
